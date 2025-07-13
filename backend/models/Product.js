@@ -29,7 +29,7 @@ const productSchema = new mongoose.Schema({
   category: {
     type: String,
     required: true,
-    enum: ['watches', 'jewelry', 'bags', 'accessories', 'clothing', 'shoes']
+    enum: ['shoes', 'bags']
   },
   images: [{
     type: String
@@ -38,10 +38,19 @@ const productSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  material: {
-    type: String,
-    required: true
-  },
+  // Add variants for shoes
+  variants: [
+    {
+      color: String,
+      images: [String],
+      sizes: [
+        {
+          size: String,
+          inStock: Boolean
+        }
+      ]
+    }
+  ],
   dimensions: {
     length: Number,
     width: Number,

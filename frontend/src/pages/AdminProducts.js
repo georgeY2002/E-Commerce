@@ -209,13 +209,185 @@ const EmptyState = styled.div`
   padding: 4rem 0;
 `;
 
-const categories = ['watches', 'jewelry', 'bags', 'accessories', 'clothing', 'shoes'];
+const categories = ['bags', 'shoes'];
+
+// ProductModal component for add/edit
+function ProductModal({ product, onClose, onSave }) {
+  const isEdit = !!product;
+  const [form, setForm] = useState(() =>
+    product ? { ...product } : {
+      name: '',
+      description: '',
+      price: '',
+      originalPrice: '',
+      discountPercentage: '',
+      category: 'shoes',
+      brand: '',
+      images: [],
+      stockQuantity: '',
+      featured: false,
+      variants: []
+    }
+  );
+  const [variantDraft, setVariantDraft] = useState({ color: '', images: [], sizes: [{ size: '', inStock: true }] });
+  const [variantImages, setVariantImages] = useState([]);
+  const [variantColor, setVariantColor] = useState('');
+  const [variantSizes, setVariantSizes] = useState([{ size: '', inStock: true }]);
+  const [error, setError] = useState('');
+  const isShoes = form.category === 'shoes';
+
+  // Handle input changes
+  const handleChange = e => {
+    const { name, value, type, checked } = e.target;
+    setForm(f => ({ ...f, [name]: type === 'checkbox' ? checked : value }));
+  };
+
+  // Handle images for bags
+  const handleImagesChange = e => {
+    setForm(f => ({ ...f, images: Array.from(e.target.files) }));
+  };
+
+  // Handle variant images
+  const handleVariantImagesChange = e => {
+    setVariantImages(Array.from(e.target.files));
+  };
+
+  // Handle adding a size to the variant
+  const handleAddSize = () => {
+    setVariantSizes(sizes => [...sizes, { size: '', inStock: true }]);
+  };
+
+  // Handle removing a size
+  const handleRemoveSize = idx => {
+    setVariantSizes(sizes => sizes.filter((_, i) => i !== idx));
+  };
+
+  // Handle variant size change
+  const handleVariantSizeChange = (idx, field, value) => {
+    setVariantSizes(sizes => sizes.map((s, i) => i === idx ? { ...s, [field]: value } : s));
+  };
+
+  // Add variant to form
+  const handleAddVariant = () => {
+    if (!variantColor || variantSizes.some(s => !s.size)) {
+      setError('Please enter color and all sizes');
+      return;
+    }
+    setForm(f => ({
+      ...f,
+      variants: [
+        ...f.variants,
+        {
+          color: variantColor,
+          images: variantImages.map(f => URL.createObjectURL(f)), // For preview only
+          sizes: variantSizes
+        }
+      ]
+    }));
+    setVariantColor('');
+    setVariantImages([]);
+    setVariantSizes([{ size: '', inStock: true }]);
+    setError('');
+  };
+
+  // Remove variant
+  const handleRemoveVariant = idx => {
+    setForm(f => ({ ...f, variants: f.variants.filter((_, i) => i !== idx) }));
+  };
+
+  // Handle submit
+  const handleSubmit = async e => {
+    e.preventDefault();
+    // TODO: Upload images to backend, send correct structure
+    // For now, just call onSave and close
+    onSave();
+    onClose();
+  };
+
+  return (
+    <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.7)', zIndex: 2000, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <form onSubmit={handleSubmit} style={{ background: '#222', borderRadius: 16, padding: 24, minWidth: 320, maxWidth: 480, width: '100%', boxShadow: '0 8px 32px rgba(0,0,0,0.2)', position: 'relative' }}>
+        <button type="button" onClick={onClose} style={{ position: 'absolute', top: 12, right: 12, background: 'none', border: 'none', color: '#77ACB7', fontSize: 24, cursor: 'pointer' }}>×</button>
+        <h2 style={{ color: '#77ACB7', marginBottom: 16 }}>{isEdit ? 'Edit' : 'Add'} Product</h2>
+        <label>Name<input name="name" value={form.name} onChange={handleChange} required style={{ width: '100%', marginBottom: 12 }} /></label>
+        <label>Description<textarea name="description" value={form.description} onChange={handleChange} required style={{ width: '100%', marginBottom: 12 }} /></label>
+        <label>Price<input name="price" type="number" value={form.price} onChange={handleChange} required style={{ width: '100%', marginBottom: 12 }} /></label>
+        <label>Original Price<input name="originalPrice" type="number" value={form.originalPrice} onChange={handleChange} style={{ width: '100%', marginBottom: 12 }} /></label>
+        <label>Discount %<input name="discountPercentage" type="number" value={form.discountPercentage} onChange={handleChange} style={{ width: '100%', marginBottom: 12 }} /></label>
+        <label>Category
+          <select name="category" value={form.category} onChange={handleChange} style={{ width: '100%', marginBottom: 12 }}>
+            <option value="shoes">Shoes</option>
+            <option value="bags">Bags</option>
+          </select>
+        </label>
+        <label>Brand<input name="brand" value={form.brand} onChange={handleChange} required style={{ width: '100%', marginBottom: 12 }} /></label>
+        <label>Stock Quantity<input name="stockQuantity" type="number" value={form.stockQuantity} onChange={handleChange} required style={{ width: '100%', marginBottom: 12 }} /></label>
+        <label style={{ display: 'flex', alignItems: 'center', marginBottom: 12 }}>
+          <input name="featured" type="checkbox" checked={form.featured} onChange={handleChange} style={{ marginRight: 8 }} /> Featured
+        </label>
+        {isShoes ? (
+          <div style={{ marginBottom: 16 }}>
+            <h3 style={{ color: '#77ACB7', fontSize: 18, marginBottom: 8 }}>Variants (Color, Images, Sizes)</h3>
+            {form.variants.map((v, idx) => (
+              <div key={idx} style={{ background: '#333', borderRadius: 8, padding: 8, marginBottom: 8 }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <span style={{ color: '#fff' }}>{v.color}</span>
+                  <button type="button" onClick={() => handleRemoveVariant(idx)} style={{ background: 'none', border: 'none', color: '#ff6b6b', fontSize: 18, cursor: 'pointer' }}>Remove</button>
+                </div>
+                <div style={{ display: 'flex', gap: 4, margin: '4px 0' }}>
+                  {v.images && v.images.map((img, i) => <img key={i} src={img} alt="variant" style={{ width: 32, height: 32, borderRadius: 4 }} />)}
+                </div>
+                <div style={{ fontSize: 13, color: '#aaa' }}>Sizes: {v.sizes.map(s => `${s.size}${s.inStock ? '' : ' (Out)'}`).join(', ')}</div>
+              </div>
+            ))}
+            <div style={{ background: '#292929', borderRadius: 8, padding: 8, marginTop: 8 }}>
+              <input placeholder="Color" value={variantColor} onChange={e => setVariantColor(e.target.value)} style={{ width: '40%', marginRight: 8 }} />
+              <input type="file" multiple onChange={handleVariantImagesChange} style={{ marginBottom: 8 }} />
+              <div style={{ margin: '8px 0' }}>
+                {variantSizes.map((s, idx) => (
+                  <div key={idx} style={{ display: 'flex', alignItems: 'center', marginBottom: 4 }}>
+                    <input placeholder="Size" value={s.size} onChange={e => handleVariantSizeChange(idx, 'size', e.target.value)} style={{ width: 60, marginRight: 8 }} />
+                    <label style={{ color: '#fff', fontSize: 13 }}>
+                      <input type="checkbox" checked={s.inStock} onChange={e => handleVariantSizeChange(idx, 'inStock', e.target.checked)} style={{ marginRight: 4 }} /> In Stock
+                    </label>
+                    <button type="button" onClick={() => handleRemoveSize(idx)} style={{ background: 'none', border: 'none', color: '#ff6b6b', fontSize: 16, marginLeft: 8, cursor: 'pointer' }}>×</button>
+                  </div>
+                ))}
+                <button type="button" onClick={handleAddSize} style={{ background: '#77ACB7', color: '#1A1A1A', border: 'none', borderRadius: 6, padding: '2px 10px', fontWeight: 600, fontSize: 13, cursor: 'pointer' }}>+ Size</button>
+              </div>
+              <button type="button" onClick={handleAddVariant} style={{ background: '#77ACB7', color: '#1A1A1A', border: 'none', borderRadius: 6, padding: '4px 16px', fontWeight: 600, fontSize: 14, cursor: 'pointer', marginTop: 4 }}>Add Variant</button>
+              {error && <div style={{ color: '#ff6b6b', fontSize: 13, marginTop: 4 }}>{error}</div>}
+            </div>
+          </div>
+        ) : (
+          <div style={{ marginBottom: 16 }}>
+            <label>Images<input type="file" multiple onChange={handleImagesChange} style={{ width: '100%', marginBottom: 8 }} /></label>
+          </div>
+        )}
+        <button type="submit" style={{ background: '#77ACB7', color: '#1A1A1A', border: 'none', borderRadius: 8, padding: '0.8rem 2rem', fontWeight: 600, fontSize: 16, cursor: 'pointer', width: '100%' }}>{isEdit ? 'Save Changes' : 'Add Product'}</button>
+      </form>
+    </div>
+  );
+}
 
 const AdminProducts = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('');
+
+  // Add/Edit Product Modal
+  const [showModal, setShowModal] = useState(false);
+  const [editProduct, setEditProduct] = useState(null);
+
+  const handleOpenModal = (product = null) => {
+    setEditProduct(product);
+    setShowModal(true);
+  };
+  const handleCloseModal = () => {
+    setEditProduct(null);
+    setShowModal(false);
+  };
 
   useEffect(() => {
     fetchProducts();
@@ -255,6 +427,7 @@ const AdminProducts = () => {
       <Container>
         <Header>
           <Title>Product Management</Title>
+          <button onClick={() => handleOpenModal()} style={{marginBottom:'1.5rem',padding:'0.8rem 2rem',borderRadius:12,background:'#77ACB7',color:'#1A1A1A',fontWeight:600,border:'none',fontSize:'1.1rem',cursor:'pointer'}}>Add Product</button>
         </Header>
 
         <Controls>
@@ -270,11 +443,8 @@ const AdminProducts = () => {
           
           <Select value={category} onChange={e => setCategory(e.target.value)}>
             <option value="">All Categories</option>
-            {categories.map(cat => (
-              <option key={cat} value={cat}>
-                {cat.charAt(0).toUpperCase() + cat.slice(1)}
-              </option>
-            ))}
+            <option value="bags">Bags</option>
+            <option value="shoes">Shoes</option>
           </Select>
         </Controls>
 
@@ -309,6 +479,14 @@ const AdminProducts = () => {
           ))}
         </ProductsGrid>
       </Container>
+
+      {showModal && (
+        <ProductModal
+          product={editProduct}
+          onClose={handleCloseModal}
+          onSave={fetchProducts}
+        />
+      )}
     </Wrapper>
   );
 };

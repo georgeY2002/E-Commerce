@@ -401,55 +401,77 @@ const Modal = styled(motion.div)`
   align-items: center;
   justify-content: center;
   z-index: 1000;
-  padding: 2rem;
+  padding: 1rem;
+  @media (max-width: 600px) {
+    padding: 0.2rem;
+    align-items: flex-end;
+  }
 `;
 
 const ModalContent = styled(motion.div)`
   background: linear-gradient(145deg, #222 0%, #1a1a1a 100%);
-  border-radius: 20px;
-  padding: 2.5rem;
-  max-width: 800px;
+  border-radius: 16px;
+  padding: 2rem;
+  max-width: 95vw;
   width: 100%;
-  max-height: 90vh;
+  max-height: 95vh;
   overflow-y: auto;
   border: 1px solid rgba(119, 172, 183, 0.1);
   position: relative;
+  box-sizing: border-box;
+  @media (max-width: 600px) {
+    padding: 0.8rem 0.5rem 1.5rem 0.5rem;
+    border-radius: 10px 10px 0 0;
+    font-size: 0.95rem;
+    max-height: 90vh;
+  }
 `;
 
 const CloseBtn = styled.button`
   position: absolute;
   top: 1rem;
   right: 1rem;
-  background: none;
-  border: none;
+  background: #222;
+  border: 2px solid #77ACB7;
   color: #77ACB7;
-  font-size: 1.5rem;
+  font-size: 2rem;
   cursor: pointer;
-  padding: 0.5rem;
+  padding: 0.5rem 1rem;
   border-radius: 50%;
-  transition: all 0.3s ease;
-  
+  z-index: 10;
+  transition: background 0.2s;
+  @media (max-width: 600px) {
+    top: 0.5rem;
+    right: 0.5rem;
+    font-size: 2.2rem;
+    padding: 0.7rem 1.2rem;
+  }
   &:hover {
-    background: rgba(119, 172, 183, 0.1);
+    background: #77ACB7;
+    color: #1A1A1A;
   }
 `;
 
 const OrderDetailsGrid = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 2rem;
-  margin-top: 2rem;
-  
-  @media (max-width: 768px) {
+  gap: 1.2rem;
+  margin-top: 1.2rem;
+  @media (max-width: 900px) {
     grid-template-columns: 1fr;
+    gap: 0.8rem;
   }
 `;
 
 const DetailSection = styled.div`
   background: rgba(26, 26, 26, 0.5);
-  padding: 1.5rem;
-  border-radius: 15px;
+  padding: 1rem;
+  border-radius: 10px;
   border: 1px solid rgba(119, 172, 183, 0.1);
+  @media (max-width: 600px) {
+    padding: 0.6rem;
+    font-size: 0.95rem;
+  }
 `;
 
 const DetailTitle = styled.h4`
@@ -680,7 +702,7 @@ const AdminOrders = () => {
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.8, opacity: 0 }}
-            onClick={(e) => e.stopPropagation()}
+            onClick={e => e.stopPropagation()}
           >
             <CloseBtn onClick={() => setShowOrderDetails(false)}>×</CloseBtn>
             

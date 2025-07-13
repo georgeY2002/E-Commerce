@@ -124,4 +124,26 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
+// Check stock for a specific shoe variant
+router.get('/products/:id/variant-stock', async (req, res) => {
+  try {
+    const { color, size } = req.query;
+    const product = await Product.findById(req.params.id);
+    if (!product || product.category !== 'shoes' || !product.variants) {
+      return res.status(404).json({ message: 'Shoe not found or no variants' });
+    }
+    const variant = product.variants.find(v => v.color === color);
+    if (!variant) {
+      return res.status(404).json({ message: 'Color not found' });
+    }
+    const sizeObj = variant.sizes.find(s => s.size === size);
+    if (!sizeObj) {
+      return res.status(404).json({ message: 'Size not found' });
+    }
+    res.json({ inStock: sizeObj.inStock });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 module.exports = router; 

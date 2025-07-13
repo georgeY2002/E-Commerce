@@ -376,10 +376,39 @@ const ProductDetail = () => {
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const { addToCart } = useCart();
+  const [selectedColor, setSelectedColor] = useState('');
+  const [selectedSize, setSelectedSize] = useState('');
+  const [variantImages, setVariantImages] = useState([]);
+  const [inStock, setInStock] = useState(true);
 
   useEffect(() => {
     fetchProduct();
   }, [id]);
+
+  useEffect(() => {
+    if (product && product.category === 'shoes' && product.variants && product.variants.length > 0) {
+      // Default to first color
+      setSelectedColor(product.variants[0].color);
+    }
+  }, [product]);
+
+  useEffect(() => {
+    if (product && product.category === 'shoes' && selectedColor) {
+      const variant = product.variants.find(v => v.color === selectedColor);
+      setVariantImages(variant ? variant.images : []);
+      setSelectedSize('');
+    }
+  }, [product, selectedColor]);
+
+  useEffect(() => {
+    if (product && product.category === 'shoes' && selectedColor && selectedSize) {
+      // Check stock via API
+      fetch(`/api/products/${product._id}/variant-stock?color=${encodeURIComponent(selectedColor)}&size=${encodeURIComponent(selectedSize)}`)
+        .then(res => res.json())
+        .then(data => setInStock(data.inStock))
+        .catch(() => setInStock(false));
+    }
+  }, [product, selectedColor, selectedSize]);
 
   const fetchProduct = async () => {
     try {
@@ -435,7 +464,7 @@ const ProductDetail = () => {
           <ImageSection>
             <MainImageContainer>
               <MainImage 
-                src={product.images?.[selectedImage] || '/placeholder-image.jpg'} 
+                src={product.category === 'shoes' && variantImages.length > 0 ? variantImages[selectedImage] : product.images?.[selectedImage] || '/placeholder-image.jpg'} 
                 alt={product.name} 
               />
               <ProductActions>
@@ -450,8 +479,20 @@ const ProductDetail = () => {
                 {product.category}
               </ProductBadge>
             </MainImageContainer>
-
-            {product.images && product.images.length > 1 && (
+            {product.category === 'shoes' && variantImages.length > 1 && (
+              <ImageGallery>
+                {variantImages.map((image, index) => (
+                  <ThumbnailImage
+                    key={index}
+                    active={index === selectedImage}
+                    onClick={() => setSelectedImage(index)}
+                  >
+                    <img src={image} alt={`${product.name} - ${index + 1}`} />
+                  </ThumbnailImage>
+                ))}
+              </ImageGallery>
+            )}
+            {product.category !== 'shoes' && product.images && product.images.length > 1 && (
               <ImageGallery>
                 {product.images.map((image, index) => (
                   <ThumbnailImage
@@ -470,7 +511,6 @@ const ProductDetail = () => {
             <ProductHeader>
               <ProductName>{product.name}</ProductName>
               <ProductBrand>{product.brand}</ProductBrand>
-              <div style={{ color: '#aaa', fontSize: '1.1rem', marginBottom: '1rem' }}>Material: {product.material}</div>
               <ProductPrice>
                 {product.originalPrice && product.discountPercentage ? (
                   <>
@@ -496,6 +536,57 @@ const ProductDetail = () => {
               </ProductDescription>
 
               {/* Removed ProductFeatures with feature tags */}
+              {product.category === 'shoes' && product.variants && (
+                <div style={{ margin: '1rem 0' }}>
+                  <div style={{ marginBottom: 8, color: '#77ACB7', fontWeight: 600 }}>Color:</div>
+                  <div style={{ display: 'flex', gap: 8, marginBottom: 12 }}>
+                    {product.variants.map((v, idx) => (
+                      <button
+                        key={v.color}
+                        onClick={() => setSelectedColor(v.color)}
+                        style={{
+                          background: selectedColor === v.color ? '#77ACB7' : '#333',
+                          color: selectedColor === v.color ? '#1A1A1A' : '#fff',
+                          border: 'none',
+                          borderRadius: 8,
+                          padding: '6px 18px',
+                          fontWeight: 600,
+                          cursor: 'pointer',
+                          fontSize: 15
+                        }}
+                      >
+                        {v.color}
+                      </button>
+                    ))}
+                  </div>
+                  <div style={{ marginBottom: 8, color: '#77ACB7', fontWeight: 600 }}>Size:</div>
+                  <div style={{ display: 'flex', gap: 8, marginBottom: 12 }}>
+                    {product.variants.find(v => v.color === selectedColor)?.sizes.map((s, idx) => (
+                      <button
+                        key={s.size}
+                        onClick={() => setSelectedSize(s.size)}
+                        disabled={!s.inStock}
+                        style={{
+                          background: selectedSize === s.size ? '#77ACB7' : '#333',
+                          color: selectedSize === s.size ? '#1A1A1A' : s.inStock ? '#fff' : '#aaa',
+                          border: 'none',
+                          borderRadius: 8,
+                          padding: '6px 18px',
+                          fontWeight: 600,
+                          cursor: s.inStock ? 'pointer' : 'not-allowed',
+                          fontSize: 15,
+                          opacity: s.inStock ? 1 : 0.5
+                        }}
+                      >
+                        {s.size}
+                      </button>
+                    ))}
+                  </div>
+                  {!inStock && selectedSize && (
+                    <div style={{ color: '#ff6b6b', fontWeight: 600, marginBottom: 8 }}>Out of stock</div>
+                  )}
+                </div>
+              )}
             </ProductHeader>
 
             <ProductActionsSection>
@@ -503,6 +594,7 @@ const ProductDetail = () => {
                 onClick={handleAddToCart}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
+                disabled={product.category === 'shoes' && (!selectedColor || !selectedSize || !inStock)}
               >
                 <FiShoppingCart />
                 Add to Cart

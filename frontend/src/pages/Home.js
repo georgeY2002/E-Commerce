@@ -443,7 +443,6 @@ const Home = () => {
                   )}
                 </ProductPrice>
                 <ProductBrand>{product.brand}</ProductBrand>
-                <div style={{ color: '#aaa', fontSize: '1rem', marginBottom: '0.5rem' }}>Material: {product.material}</div>
               </ProductCard>
             ))}
           </ProductsGrid>

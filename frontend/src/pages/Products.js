@@ -715,11 +715,8 @@ const Products = () => {
             
             <Select value={category} onChange={e => setCategory(e.target.value)}>
               <option value="">All Categories</option>
-              {categories.map(cat => (
-                <option key={cat} value={cat}>
-                  {cat.charAt(0).toUpperCase() + cat.slice(1)}
-                </option>
-              ))}
+              <option value="bags">Bags</option>
+              <option value="shoes">Shoes</option>
             </Select>
             
             <Select value={sort} onChange={e => setSort(e.target.value)}>
@@ -839,8 +836,6 @@ const Products = () => {
                   )}
                 </ProductPrice>
                 <ProductBrand>{product.brand}</ProductBrand>
-                <div style={{ color: '#aaa', fontSize: '1rem', marginBottom: '0.5rem' }}>Material: {product.material}</div>
-                {/* Removed ProductFeatures with feature tags */}
                 <ProductCategory>{product.category}</ProductCategory>
               </ProductInfo>
             </ProductCard>
