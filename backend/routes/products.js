@@ -127,6 +127,7 @@ router.delete('/:id', async (req, res) => {
 // Check stock for a specific shoe variant
 router.get('/products/:id/variant-stock', async (req, res) => {
   try {
+    res.set('Cache-Control', 'no-store');
     const { color, size } = req.query;
     const product = await Product.findById(req.params.id);
     if (!product || product.category !== 'shoes' || !product.variants) {
