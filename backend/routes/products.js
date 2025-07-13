@@ -133,11 +133,11 @@ router.get('/products/:id/variant-stock', async (req, res) => {
     if (!product || product.category !== 'shoes' || !product.variants) {
       return res.status(404).json({ message: 'Shoe not found or no variants' });
     }
-    const variant = product.variants.find(v => v.color === color);
+    const variant = product.variants.find(v => v.color.trim().toLowerCase() === color.trim().toLowerCase());
     if (!variant) {
       return res.status(404).json({ message: 'Color not found' });
     }
-    const sizeObj = variant.sizes.find(s => s.size === size);
+    const sizeObj = variant.sizes.find(s => s.size.trim().toLowerCase() === size.trim().toLowerCase());
     if (!sizeObj) {
       return res.status(404).json({ message: 'Size not found' });
     }
