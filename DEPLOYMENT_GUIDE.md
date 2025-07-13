@@ -325,3 +325,36 @@ Start Command: cd backend && npm start
 **Can you update the build and start commands in your Render service settings?** 
 
 **What do you see in the Settings tab?** 🔧 
+
+## 📝 **How to Fix React Router 404 on Netlify (with _redirects file)**
+
+### **Step 1: Create a `_redirects` File**
+1. In your `frontend/public` directory, create a new file called `_redirects` (no extension).
+
+### **Step 2: Add This Line to the File**
+```
+/*    /index.html   200
+```
+
+### **Step 3: Redeploy Your Site**
+1. Commit and push the new `_redirects` file to GitHub.
+2. Netlify will automatically redeploy your site.
+3. After deployment, your routes should work and the 404 error will be gone!
+
+---
+
+## 📋 **Summary of Steps**
+
+1. **Create**: `frontend/public/_redirects`
+2. **Content**:
+   ```
+   /*    /index.html   200
+   ```
+3. **Push to GitHub**
+4. **Wait for Netlify to redeploy**
+5. **Test your site again**
+
+---
+
+**Let me know when you've added the file and redeployed!**  
+If you need help creating or committing the file, just ask! 
