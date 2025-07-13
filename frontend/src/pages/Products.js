@@ -580,6 +580,14 @@ const Products = () => {
 
   useEffect(() => {
     fetchProducts();
+    // Listen for admin product changes
+    const handleAdminProductChange = () => {
+      fetchProducts();
+    };
+    window.addEventListener('adminProductChange', handleAdminProductChange);
+    return () => {
+      window.removeEventListener('adminProductChange', handleAdminProductChange);
+    };
   }, []);
 
   useEffect(() => {

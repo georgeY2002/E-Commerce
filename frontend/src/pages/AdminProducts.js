@@ -242,6 +242,8 @@ const AdminProducts = () => {
         await axios.delete(`/api/admin/products/${productId}`);
         toast.success('Product deleted successfully');
         fetchProducts();
+        // Notify user-facing products page to refresh
+        window.dispatchEvent(new Event('adminProductChange'));
       } catch (error) {
         toast.error('Failed to delete product');
       }
