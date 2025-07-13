@@ -265,7 +265,7 @@ Build Command: npm install
 
 **Change to:**
 ```
-<code_block_to_apply_changes_from>
+Build Command: cd backend && npm install
 ```
 
 ### **Step 2: Update Start Command**
