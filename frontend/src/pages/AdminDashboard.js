@@ -348,7 +348,7 @@ const AdminDashboard = () => {
             <StatIcon>
               <FiDollarSign />
             </StatIcon>
-            <StatValue>${memoizedStats?.totalEarnings || '0'}</StatValue>
+            <StatValue>EGP{memoizedStats?.totalEarnings || '0'}</StatValue>
             <StatLabel>Total Earnings</StatLabel>
             <StatDescription>Lifetime revenue from all completed orders</StatDescription>
           </StatCard>
@@ -448,11 +448,11 @@ const AdminDashboard = () => {
               <QuickStatLabel>Pending Orders</QuickStatLabel>
             </QuickStat>
             <QuickStat>
-              <QuickStatValue>${memoizedStats?.monthlyEarnings || '0'}</QuickStatValue>
+              <QuickStatValue>EGP{memoizedStats?.monthlyEarnings || '0'}</QuickStatValue>
               <QuickStatLabel>Monthly Earnings</QuickStatLabel>
             </QuickStat>
             <QuickStat>
-              <QuickStatValue>${memoizedStats?.yearlyEarnings || '0'}</QuickStatValue>
+              <QuickStatValue>EGP{memoizedStats?.yearlyEarnings || '0'}</QuickStatValue>
               <QuickStatLabel>Yearly Earnings</QuickStatLabel>
             </QuickStat>
           </QuickStatsGrid>

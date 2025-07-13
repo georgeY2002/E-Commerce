@@ -111,7 +111,7 @@ const Navbar = () => {
   return (
     <NavbarContainer>
       <NavInner>
-        <Logo to="/">LUXURY</Logo>
+        <Logo to="/">Woman Style</Logo>
         <NavLinks>
           {navLinks.map(link => (
             <li key={link.to}><NavLink to={link.to}>{link.label}</NavLink></li>

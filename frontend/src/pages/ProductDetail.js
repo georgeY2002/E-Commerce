@@ -472,10 +472,7 @@ const ProductDetail = () => {
               <ProductBrand>{product.brand}</ProductBrand>
               
               <ProductPrice>
-                <CurrentPrice>
-                  ${product.price?.toLocaleString() || '0'}
-                  <Currency>USD</Currency>
-                </CurrentPrice>
+                <CurrentPrice>EGP{product.price?.toLocaleString() || '0'}</CurrentPrice>
               </ProductPrice>
 
               <ProductDescription>

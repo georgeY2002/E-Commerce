@@ -33,11 +33,11 @@ const Copy = styled.div`
 const Footer = () => (
   <FooterContainer>
     <Socials>
-      <SocialIcon href="#" aria-label="Instagram"><FiInstagram /></SocialIcon>
-      <SocialIcon href="#" aria-label="Twitter"><FiTwitter /></SocialIcon>
-      <SocialIcon href="#" aria-label="Facebook"><FiFacebook /></SocialIcon>
+      <a href="https://www.facebook.com/groups/2916758741977413/?ref=share&mibextid=NSMWBT" target="_blank" rel="noopener noreferrer">
+        <i className="fab fa-facebook"></i> Facebook
+      </a>
     </Socials>
-    <Copy>&copy; {new Date().getFullYear()} LUXURY. All rights reserved.</Copy>
+    <Copy>&copy; {new Date().getFullYear()} Woman Style. All rights reserved.</Copy>
   </FooterContainer>
 );
 

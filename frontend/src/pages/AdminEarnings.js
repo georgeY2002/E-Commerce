@@ -74,7 +74,7 @@ const AdminEarnings = () => {
             {earnings.map(e => (
               <EarningsItem key={e._id}>
                 <DateLabel>{e._id}</DateLabel>
-                <Amount>${e.dailyEarnings.toLocaleString()} ({e.orderCount} orders)</Amount>
+                <Amount>EGP{e.dailyEarnings.toLocaleString()} ({e.orderCount} orders)</Amount>
               </EarningsItem>
             ))}
           </EarningsList>

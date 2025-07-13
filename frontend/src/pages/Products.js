@@ -680,10 +680,6 @@ const Products = () => {
             <div className="label">Products</div>
           </StatItem>
           <StatItem>
-            <div className="value">{categories.length}</div>
-            <div className="label">Categories</div>
-          </StatItem>
-          <StatItem>
             <div className="value">Premium</div>
             <div className="label">Quality</div>
           </StatItem>
@@ -816,7 +812,7 @@ const Products = () => {
               <ProductInfo>
                 <ProductName>{product.name}</ProductName>
                 <ProductPrice>
-                  ${product.price?.toLocaleString() || '0'}
+                  EGP{product.price?.toLocaleString() || '0'}
                   <span style={{ fontSize: '0.9rem', color: '#aaa' }}>USD</span>
                 </ProductPrice>
                 <ProductBrand>{product.brand}</ProductBrand>

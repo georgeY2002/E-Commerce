@@ -151,6 +151,27 @@ const luxuryProducts = [
     ]
   },
   {
+    name: "SHIEN",
+    description: "old is gold",
+    price: 250,
+    category: "watches",
+    brand: "SHIEN",
+    material: "PLastic",
+    dimensions: {
+      length: 6.5,
+      width: 0.5,
+      height: 0.5
+    },
+    weight: 30,
+    stockQuantity: 8,
+    featured: false,
+    rating: 4.8,
+    images: [
+
+      "https://res.cloudinary.com/din7korba/image/upload/v1752416304/IMG_9815_xmz4bg.jpg"
+    ]
+  },
+  {
     name: "Van Cleef & Arpels Alhambra Necklace",
     description: "Iconic four-leaf clover motif necklace in 18k yellow gold. Features a delicate chain and timeless design.",
     price: 3200,

@@ -291,7 +291,7 @@ const AdminProducts = () => {
             >
               <ProductImage src={product.images[0]} alt={product.name} />
               <ProductName>{product.name}</ProductName>
-              <ProductPrice>${product.price.toLocaleString()}</ProductPrice>
+              <ProductPrice>EGP{product.price.toLocaleString()}</ProductPrice>
               <ProductBrand>{product.brand}</ProductBrand>
               
               <ActionButtons>

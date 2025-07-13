@@ -458,9 +458,7 @@ const Checkout = () => {
     }
   };
 
-  const subtotal = getCartTotal();
-  const tax = subtotal * 0.08;
-  const total = subtotal + tax;
+  const total = getCartTotal();
 
   return (
     <Wrapper>
@@ -643,27 +641,15 @@ const Checkout = () => {
                     <ItemName>{item.name}</ItemName>
                     <ItemDetails>Qty: {item.quantity} • {item.brand}</ItemDetails>
                   </ItemInfo>
-                  <ItemPrice>${(item.price * item.quantity).toLocaleString()}</ItemPrice>
+                  <ItemPrice>EGP{(item.price * item.quantity).toLocaleString()}</ItemPrice>
                 </OrderItem>
               ))}
             </OrderItems>
 
             <SummaryBreakdown>
               <SummaryRow>
-                <SummaryLabel>Subtotal</SummaryLabel>
-                <SummaryValue>${subtotal.toLocaleString()}</SummaryValue>
-              </SummaryRow>
-              <SummaryRow>
-                <SummaryLabel>Shipping</SummaryLabel>
-                <SummaryValue>Free</SummaryValue>
-              </SummaryRow>
-              <SummaryRow>
-                <SummaryLabel>Tax (8%)</SummaryLabel>
-                <SummaryValue>${tax.toFixed(2)}</SummaryValue>
-              </SummaryRow>
-              <SummaryRow>
                 <SummaryLabel>Total</SummaryLabel>
-                <SummaryValue>${total.toLocaleString()}</SummaryValue>
+                <SummaryValue>EGP{total.toLocaleString()}</SummaryValue>
               </SummaryRow>
             </SummaryBreakdown>
           </OrderSummary>

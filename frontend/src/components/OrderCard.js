@@ -337,7 +337,7 @@ const OrderCard = memo(({
               <ItemName>{item.product?.name}</ItemName>
               <ItemDetails>Qty: {item.quantity} • {item.product?.brand}</ItemDetails>
             </ItemInfo>
-            <ItemPrice>${item.price?.toLocaleString()}</ItemPrice>
+            <ItemPrice>EGP{item.price?.toLocaleString()}</ItemPrice>
           </OrderItem>
         ))}
       </OrderItems>
