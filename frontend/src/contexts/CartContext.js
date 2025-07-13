@@ -34,31 +34,68 @@ export const CartProvider = ({ children }) => {
 
   const addToCart = (product, quantity = 1) => {
     setCart(prevCart => {
-      const existingItem = prevCart.find(item => item._id === product._id);
-      
-      if (existingItem) {
-        // Update quantity if item already exists
-        const updatedCart = prevCart.map(item =>
-          item._id === product._id
-            ? { ...item, quantity: item.quantity + quantity }
-            : item
+      if (product.category === 'shoes') {
+        // For shoes, use productId + color + size as unique key
+        const existingItem = prevCart.find(item =>
+          item._id === product._id &&
+          item.selectedColor === product.selectedColor &&
+          item.selectedSize === product.selectedSize
         );
-        toast.success(`Updated ${product.name} quantity`);
-        return updatedCart;
+        if (existingItem) {
+          // Update quantity if item already exists
+          const updatedCart = prevCart.map(item =>
+            item._id === product._id &&
+            item.selectedColor === product.selectedColor &&
+            item.selectedSize === product.selectedSize
+              ? { ...item, quantity: item.quantity + quantity }
+              : item
+          );
+          toast.success(`Updated ${product.name} (${product.selectedColor}, ${product.selectedSize}) quantity`);
+          return updatedCart;
+        } else {
+          // Add new item to cart
+          const newItem = {
+            _id: product._id,
+            name: product.name,
+            price: product.price,
+            images: product.images || [],
+            quantity,
+            brand: product.brand,
+            category: product.category,
+            description: product.description,
+            selectedColor: product.selectedColor,
+            selectedSize: product.selectedSize
+          };
+          toast.success(`${product.name} (${product.selectedColor}, ${product.selectedSize}) added to cart`);
+          return [...prevCart, newItem];
+        }
       } else {
-        // Add new item to cart
-        const newItem = {
-          _id: product._id,
-          name: product.name,
-          price: product.price,
-          images: product.images || [],
-          quantity,
-          brand: product.brand,
-          category: product.category,
-          description: product.description
-        };
-        toast.success(`${product.name} added to cart`);
-        return [...prevCart, newItem];
+        // Bags and other products
+        const existingItem = prevCart.find(item => item._id === product._id);
+        if (existingItem) {
+          // Update quantity if item already exists
+          const updatedCart = prevCart.map(item =>
+            item._id === product._id
+              ? { ...item, quantity: item.quantity + quantity }
+              : item
+          );
+          toast.success(`Updated ${product.name} quantity`);
+          return updatedCart;
+        } else {
+          // Add new item to cart
+          const newItem = {
+            _id: product._id,
+            name: product.name,
+            price: product.price,
+            images: product.images || [],
+            quantity,
+            brand: product.brand,
+            category: product.category,
+            description: product.description
+          };
+          toast.success(`${product.name} added to cart`);
+          return [...prevCart, newItem];
+        }
       }
     });
   };
