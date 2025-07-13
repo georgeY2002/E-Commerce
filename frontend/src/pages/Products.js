@@ -812,17 +812,27 @@ const Products = () => {
               <ProductInfo>
                 <ProductName>{product.name}</ProductName>
                 <ProductPrice>
-                  EGP{product.price?.toLocaleString() || '0'}
-                  <span style={{ fontSize: '0.9rem', color: '#aaa' }}>USD</span>
+                  {product.originalPrice && product.discountPercentage ? (
+                    <>
+                      <span style={{ textDecoration: 'line-through', color: '#888', fontSize: '1.1rem', marginRight: 8 }}>
+                        EGP{product.originalPrice.toLocaleString()}
+                      </span>
+                      <span style={{ color: '#fff', fontWeight: 700, fontSize: '1.3rem', marginRight: 8 }}>
+                        EGP{product.price.toLocaleString()}
+                      </span>
+                      <span style={{ color: '#ff6b6b', fontWeight: 600, fontSize: '1rem' }}>
+                        {product.discountPercentage}% OFF
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      EGP{product.price?.toLocaleString() || '0'}
+                    </>
+                  )}
                 </ProductPrice>
                 <ProductBrand>{product.brand}</ProductBrand>
-                
-                <ProductFeatures>
-                  <FeatureTag>Premium</FeatureTag>
-                  <FeatureTag>Luxury</FeatureTag>
-                  <FeatureTag>Handcrafted</FeatureTag>
-                </ProductFeatures>
-                
+                <div style={{ color: '#aaa', fontSize: '1rem', marginBottom: '0.5rem' }}>Material: {product.material}</div>
+                {/* Removed ProductFeatures with feature tags */}
                 <ProductCategory>{product.category}</ProductCategory>
               </ProductInfo>
             </ProductCard>

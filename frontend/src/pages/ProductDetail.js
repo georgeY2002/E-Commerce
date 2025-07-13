@@ -470,21 +470,32 @@ const ProductDetail = () => {
             <ProductHeader>
               <ProductName>{product.name}</ProductName>
               <ProductBrand>{product.brand}</ProductBrand>
-              
+              <div style={{ color: '#aaa', fontSize: '1.1rem', marginBottom: '1rem' }}>Material: {product.material}</div>
               <ProductPrice>
-                <CurrentPrice>EGP{product.price?.toLocaleString() || '0'}</CurrentPrice>
+                {product.originalPrice && product.discountPercentage ? (
+                  <>
+                    <span style={{ textDecoration: 'line-through', color: '#888', fontSize: '1.3rem', marginRight: 12 }}>
+                      EGP{product.originalPrice.toLocaleString()}
+                    </span>
+                    <CurrentPrice>
+                      EGP{product.price.toLocaleString()}
+                    </CurrentPrice>
+                    <span style={{ color: '#ff6b6b', fontWeight: 600, fontSize: '1.1rem', marginLeft: 8 }}>
+                      {product.discountPercentage}% OFF
+                    </span>
+                  </>
+                ) : (
+                  <CurrentPrice>
+                    EGP{product.price?.toLocaleString() || '0'}
+                  </CurrentPrice>
+                )}
               </ProductPrice>
 
               <ProductDescription>
                 {product.description}
               </ProductDescription>
 
-              <ProductFeatures>
-                <FeatureTag>Premium Quality</FeatureTag>
-                <FeatureTag>Luxury Design</FeatureTag>
-                <FeatureTag>Handcrafted</FeatureTag>
-                <FeatureTag>Limited Edition</FeatureTag>
-              </ProductFeatures>
+              {/* Removed ProductFeatures with feature tags */}
             </ProductHeader>
 
             <ProductActionsSection>
@@ -505,21 +516,7 @@ const ProductDetail = () => {
                   <div className="icon"><FiTruck /></div>
                   <div>
                     <div className="label">Shipping</div>
-                    <div className="value">Free Worldwide</div>
-                  </div>
-                </DetailItem>
-                <DetailItem>
-                  <div className="icon"><FiShield /></div>
-                  <div>
-                    <div className="label">Warranty</div>
-                    <div className="value">2 Years</div>
-                  </div>
-                </DetailItem>
-                <DetailItem>
-                  <div className="icon"><FiRefreshCw /></div>
-                  <div>
-                    <div className="label">Returns</div>
-                    <div className="value">30 Days</div>
+                    <div className="value">Cairo</div>
                   </div>
                 </DetailItem>
                 <DetailItem>

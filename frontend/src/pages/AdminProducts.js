@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import { motion } from 'framer-motion';
-import { FiTrash2, FiSearch, FiFilter, FiEye } from 'react-icons/fi';
+import { FiTrash2, FiSearch, FiFilter, FiEye, FiPlus, FiEdit, FiX, FiUpload } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 
 const Wrapper = styled.section`

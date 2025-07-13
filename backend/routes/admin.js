@@ -389,21 +389,31 @@ router.get('/products/:id', async (req, res) => {
 });
 
 // Create new product (admin)
-router.post('/products', async (req, res) => {
+router.post('/products', upload.array('images', 5), async (req, res) => {
   try {
     const productData = { ...req.body };
-    
-    // Process images if provided
-    if (req.body.images && Array.isArray(req.body.images)) {
-      try {
-        const processedImages = await processImages(req.body.images);
-        productData.images = processedImages;
-      } catch (error) {
-        // Continue without images if processing fails
-        productData.images = [];
+    // Parse dimensions if sent as JSON string
+    if (productData.dimensions && typeof productData.dimensions === 'string') {
+      try { productData.dimensions = JSON.parse(productData.dimensions); } catch {}
+    }
+    // Handle images: uploaded files + existing URLs (for edit)
+    let imageUrls = [];
+    // Uploaded files
+    if (req.files && req.files.length > 0) {
+      for (const file of req.files) {
+        const url = await uploadToCloudinary(file.buffer);
+        imageUrls.push(url);
       }
     }
-    
+    // Existing image URLs (for edit)
+    if (req.body.existingImages) {
+      if (Array.isArray(req.body.existingImages)) {
+        imageUrls = [...req.body.existingImages, ...imageUrls];
+      } else if (typeof req.body.existingImages === 'string') {
+        imageUrls = [req.body.existingImages, ...imageUrls];
+      }
+    }
+    productData.images = imageUrls;
     const product = new Product(productData);
     const newProduct = await product.save();
     res.status(201).json(newProduct);
@@ -415,7 +425,6 @@ router.post('/products', async (req, res) => {
         errors: validationErrors 
       });
     }
-    
     res.status(500).json({ message: error.message });
   }
 });

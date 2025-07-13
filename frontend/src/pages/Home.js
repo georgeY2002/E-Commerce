@@ -423,8 +423,27 @@ const Home = () => {
               >
                 <ProductImage src={product.images[0]} alt={product.name} />
                 <ProductName>{product.name}</ProductName>
-                <ProductPrice>EGP{product.price.toLocaleString()}</ProductPrice>
+                <ProductPrice>
+                  {product.originalPrice && product.discountPercentage ? (
+                    <>
+                      <span style={{ textDecoration: 'line-through', color: '#888', fontSize: '1.1rem', marginRight: 8 }}>
+                        EGP{product.originalPrice.toLocaleString()}
+                      </span>
+                      <span style={{ color: '#fff', fontWeight: 700, fontSize: '1.3rem', marginRight: 8 }}>
+                        EGP{product.price.toLocaleString()}
+                      </span>
+                      <span style={{ color: '#ff6b6b', fontWeight: 600, fontSize: '1rem' }}>
+                        {product.discountPercentage}% OFF
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      EGP{product.price.toLocaleString()}
+                    </>
+                  )}
+                </ProductPrice>
                 <ProductBrand>{product.brand}</ProductBrand>
+                <div style={{ color: '#aaa', fontSize: '1rem', marginBottom: '0.5rem' }}>Material: {product.material}</div>
               </ProductCard>
             ))}
           </ProductsGrid>
@@ -485,7 +504,7 @@ const Home = () => {
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
           >
-            <p>Welcome to <strong>LUXURY</strong>. Where elegance meets exclusivity.</p>
+            <p>Welcome to <strong>Woman Style</strong>. Where elegance meets exclusivity.</p>
             <p>Shop the finest, live the best. Every moment is an opportunity to elevate your experience.</p>
           </BrandMessage>
         </Container>
