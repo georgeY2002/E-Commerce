@@ -450,25 +450,7 @@ router.delete('/products/:id', async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
-// TEMPORARY: Create admin user via GET request
-router.get('/create-temp-admin', async (req, res) => {
-  try {
-    const User = require('../models/User');
-    const existingAdmin = await User.findOne({ email: 'admin@luxuryecommerce.com' });
-    if (existingAdmin) {
-      return res.status(400).json({ message: 'Admin already exists' });
-    }
-    const admin = new User({
-      name: 'Admin',
-      email: 'admin@luxuryecommerce.com',
-      password: 'admin123',
-      role: 'admin'
-    });
-    await admin.save();
-    res.json({ message: 'Admin user created!' });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
+
+
 
 module.exports = router; 
