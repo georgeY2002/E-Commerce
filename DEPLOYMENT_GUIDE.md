@@ -252,3 +252,76 @@ Remember to:
 - Regularly backup your database
 - Keep dependencies updated
 - Monitor usage limits on free tiers 
+
+## 🔧 **Fix the Build Command Issue**
+
+### **Step 1: Update Build Command**
+In your Render service configuration, change:
+
+**Current (incorrect):**
+```
+Build Command: npm install
+```
+
+**Change to:**
+```
+<code_block_to_apply_changes_from>
+```
+
+### **Step 2: Update Start Command**
+Also change:
+
+**Current (incorrect):**
+```
+Start Command: npm start
+```
+
+**Change to:**
+```
+Start Command: cd backend && npm start
+```
+
+### **Step 3: Alternative Configuration**
+If that doesn't work, try this:
+
+**Build Command:**
+```
+npm install --prefix backend
+```
+
+**Start Command:**
+```
+npm start --prefix backend
+```
+
+---
+
+##  **How to Update in Render:**
+
+1. **Go to your Render dashboard**
+2. **Click on your service**
+3. **Go to "Settings" tab**
+4. **Find "Build & Deploy" section**
+5. **Update the commands** as shown above
+6. **Click "Save Changes"**
+7. **Redeploy** (it should auto-redeploy)
+
+---
+
+## 📝 **Correct Configuration Summary:**
+
+```
+Name: luxury-ecommerce-backend
+Environment: Node
+Region: (your choice)
+Branch: main
+Root Directory: backend
+Build Command: cd backend && npm install
+Start Command: cd backend && npm start
+```
+
+---
+
+**Can you update the build and start commands in your Render service settings?** 
+
+**What do you see in the Settings tab?** 🔧 
