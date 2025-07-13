@@ -358,3 +358,70 @@ Start Command: cd backend && npm start
 
 **Let me know when you've added the file and redeployed!**  
 If you need help creating or committing the file, just ask! 
+
+## ✅ **Checklist to Fix Netlify 404 for React Router**
+
+### 1. **File Location**
+- The `_redirects` file **must** be in:  
+  `frontend/public/_redirects`  
+  (not in `src`, not in the root, not in `build`)
+
+### 2. **File Name**
+- The file must be named exactly: `_redirects`  
+  (no extension, not `.txt`, not `.redirects`)
+
+### 3. **File Content**
+- The file should contain exactly:
+  ```
+  /*    /index.html   200
+  ```
+
+### 4. **Commit and Push**
+- After creating the file, **commit and push** to GitHub:
+  ```bash
+  git add frontend/public/_redirects
+  git commit -m "Add Netlify redirects for React Router"
+  git push
+  ```
+
+### 5. **Wait for Netlify to Redeploy**
+- Netlify should automatically redeploy after you push.
+- You can check the deploy logs in the Netlify dashboard.
+
+### 6. **Clear Browser Cache / Hard Refresh**
+- Sometimes your browser caches the 404 page.
+- Try a hard refresh:  
+  - Windows: `Ctrl + F5`
+  - Mac: `Cmd + Shift + R`
+
+---
+
+## 🕵️‍♂️ **If It Still Doesn't Work:**
+
+### **A. Check Deploy Logs**
+- Go to your Netlify dashboard
+- Click on your site
+- Go to the **"Deploys"** tab
+- Click on the latest deploy
+- Look for a line like:
+  ```
+  Processing /public/_redirects
+  ```
+
+### **B. Confirm File is in the Build**
+- Download your deployed site from Netlify (there's a "Download deploy" button in the deploy details)
+- Check if `_redirects` is present in the root of the downloaded folder
+
+### **C. Manual Deploy**
+- Try dragging and dropping your local `build` folder (after running `npm run build` in `frontend`) to Netlify's "Deploys" page to test if the redirect works.
+
+---
+
+## 📝 **Let Me Know:**
+- Did you see "Processing /public/_redirects" in the deploy logs?
+- Is the file definitely in `frontend/public/_redirects`?
+- What is your Netlify site URL? (I can check the headers for you!)
+
+---
+
+If you want, you can paste your Netlify site URL here and I’ll help you debug further! 
